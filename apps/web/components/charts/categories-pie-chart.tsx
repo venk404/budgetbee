@@ -40,6 +40,7 @@ type PieLabelProps = {
 	outerRadius: number;
 	percent: number;
 	name: string;
+	fill: string;
 };
 
 type PieLabelLineProps = {
@@ -49,6 +50,7 @@ type PieLabelLineProps = {
 	innerRadius: number;
 	outerRadius: number;
 	percent: number;
+	fill: string;
 };
 
 export function CategoriesPieChart() {
@@ -124,7 +126,7 @@ export function CategoriesPieChart() {
 	);
 
 	const labelLine = React.useCallback(
-		({ cx, cy, midAngle, outerRadius, percent }: PieLabelLineProps) => {
+		({ cx, cy, midAngle, outerRadius, percent, fill }: PieLabelLineProps) => {
 			if (percent < 0.02) return <></>;
 
 			const RADIAN = Math.PI / 180;
@@ -134,12 +136,15 @@ export function CategoriesPieChart() {
 			const y1 = cy + radius1 * Math.sin(-midAngle * RADIAN);
 			const x2 = cx + radius2 * Math.cos(-midAngle * RADIAN);
 			const y2 = cy + radius2 * Math.sin(-midAngle * RADIAN);
-
+			
 			return (
 				<polyline
 					points={`${x1},${y1} ${x2},${y2}`}
-					className="fill-none stroke-current opacity-60"
-					style={{ transition: "none" }}
+					className="fill-none opacity-60"
+					style={{ 
+						transition: "none",
+						stroke: fill
+					}}
 					strokeWidth={1}
 				/>
 			);
@@ -190,12 +195,16 @@ export function CategoriesPieChart() {
 								outerRadius="80%"
 								cornerRadius={4}
 								paddingAngle={1}
+								stroke="none"
+								strokeWidth={0}
 								onMouseEnter={(_, i) => setActiveIdx(i)}
 								onMouseLeave={() => setActiveIdx(null)}>
 								{chartData?.map((c: any, i: number) => (
 									<Cell
 										key={`cell-${i}`}
 										fill={c.fill}
+										stroke="none"
+										strokeWidth={0}
 										className={cn("opacity-30", {
 											"opacity-100":
 												activeIdx === i ||
